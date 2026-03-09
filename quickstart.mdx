@@ -12,7 +12,7 @@ Follow these steps to build and run the Sorting Algorithms Visualiser on your sy
 Before you begin, make sure you have the following installed:
 
 - **Windows Operating System** (the application is built for Windows)
-- **C++ Compiler**: Visual Studio 2019/2022 or compatible C++ compiler with C++17 support
+- **C++ Compiler**: Visual Studio 2019/2022 or compatible C++ compiler with C++20 support
 - **vcpkg**: Microsoft's C++ package manager for dependency management
 - **Git**: For cloning the repository
 
@@ -27,8 +27,8 @@ Before you begin, make sure you have the following installed:
     Open your terminal and clone the Sorting Algorithms Visualiser repository:
     
     ```bash
-    git clone https://github.com/DevBoiAgru/Sorting-Algorithms-Visualiser.git
-    cd Sorting-Algorithms-Visualiser
+    git clone https://github.com/DevBoiAgru/SortingAlgorithmsVisualiser.git
+    cd SortingAlgorithmsVisualiser
     ```
     
     This creates a local copy of the project on your machine.
@@ -65,7 +65,7 @@ Before you begin, make sure you have the following installed:
     If you prefer command-line compilation:
     
     ```bash
-    cl /EHsc /std:c++17 /I"path\to\vcpkg\installed\x64-windows\include" ^
+    cl /EHsc /std:c++20 /I"path\to\vcpkg\installed\x64-windows\include" ^
        SortingAlgos.cpp /link /LIBPATH:"path\to\vcpkg\installed\x64-windows\lib" ^
        sfml-graphics.lib sfml-window.lib sfml-system.lib /OUT:SortingAlgos.exe
     ```
