@@ -1,0 +1,124 @@
+---
+title: Selection Sort
+description: A simple sorting algorithm that repeatedly finds the minimum element from the unsorted portion and moves it to the beginning.
+---
+
+## Overview
+
+Selection Sort divides the array into two parts: a sorted portion at the beginning and an unsorted portion at the end. It repeatedly selects the smallest (or largest) element from the unsorted portion and swaps it into the correct position in the sorted portion.
+
+## Complexity
+
+- **Time Complexity**: O(n²) in all cases (best, average, and worst)
+- **Space Complexity**: O(1) - sorts in-place
+- **Stable**: No - may change relative order of equal elements (though stable variants exist)
+
+## Implementation
+
+Here's the actual implementation from the Sorting Algorithms Visualiser:
+
+```cpp
+void SelectionSort(std::vector<int>& nums) {
+	int i, j, minId;
+	for (i = 0; i < nums.size() - 1; i++) {
+		minId = i;
+		for (j = i + 1; j < nums.size(); j++) {
+			if (nums[j] < nums[minId]) {
+				minId = j;
+				HighlightRectangles(j, i, -1);
+			}
+			else {
+				HighlightRectangles(-1, i, j);
+			}
+			std::this_thread::sleep_for(std::chrono::nanoseconds(SORT_DELAY));
+		}
+		if (minId != i)
+			swapNums(&nums[minId], &nums[i]);
+	}
+	Verify(nums);
+	return;
+}
+```
+
+## How It Works
+
+1. **Outer Loop**: Iterates from position 0 to n-2 (position `i` marks the boundary of the sorted portion)
+2. **Initialize minimum**: Assume `minId = i` (current position has the minimum value)
+3. **Inner Loop**: Search through unsorted portion (from `i+1` to end)
+   - If a smaller element is found, update `minId = j`
+4. **Swap**: After finding the actual minimum, swap it with element at position `i`
+5. **Repeat**: The sorted portion grows by one element each iteration
+6. **Verification**: After sorting completes, highlight each element to confirm sorted order
+
+### Step-by-Step Example
+
+For the array `[64, 25, 12, 22, 11]`:
+
+**Pass 1** (i=0):
+- Find minimum in `[64, 25, 12, 22, 11]` → `11` at index 4
+- Swap 64 and 11 → `[11, 25, 12, 22, 64]`
+
+**Pass 2** (i=1):
+- Find minimum in `[25, 12, 22, 64]` → `12` at index 2
+- Swap 25 and 12 → `[11, 12, 25, 22, 64]`
+
+**Pass 3** (i=2):
+- Find minimum in `[25, 22, 64]` → `22` at index 3
+- Swap 25 and 22 → `[11, 12, 22, 25, 64]`
+
+**Pass 4** (i=3):
+- Find minimum in `[25, 64]` → `25` at index 3
+- No swap needed → `[11, 12, 22, 25, 64]`
+
+Array is now sorted!
+
+## Watch It in Action
+
+When running the visualiser, you'll see:
+
+- **Red highlight** (highlight1): Current element being examined `j` (when it's a new minimum)
+- **Green highlight** (highlight2): The boundary position `i` where the minimum will be placed
+- **Blue highlight** (highlight3): Current element being examined `j` (when it's not a new minimum)
+
+The algorithm highlights the current position being examined and the boundary of the sorted/unsorted portions. When a new minimum is found, it's highlighted in red (line 171), otherwise elements are highlighted in blue (line 174).
+
+<Info>
+  The color highlighting differentiates between finding a new minimum element (red) versus just scanning through elements (blue), making it easy to see when the minimum changes.
+</Info>
+
+## Best Use Cases
+
+- **Small datasets**: Acceptable for small arrays where simplicity matters
+- **Memory-constrained systems**: Requires only O(1) additional space
+- **Minimizing swaps**: Makes at most O(n) swaps (useful when writing to memory is expensive)
+- **Educational purposes**: Simple to understand and teach
+
+## Advantages
+
+✓ Simple to understand and implement
+✓ Performs well with small datasets
+✓ Minimizes number of swaps - at most n swaps (useful when swap operation is expensive)
+✓ In-place sorting (O(1) space)
+✓ Performs same number of comparisons regardless of input
+
+## Disadvantages
+
+✗ O(n²) time complexity in all cases - even if already sorted
+✗ Not stable (may change relative order of equal elements)
+✗ Does not adapt to partially sorted data
+✗ Performs many unnecessary comparisons
+✗ Generally slower than Insertion Sort for small arrays
+
+<Warning>
+  Selection Sort always performs O(n²) comparisons, even if the array is already sorted. This makes it inefficient compared to adaptive algorithms like Insertion Sort that can achieve O(n) on sorted data.
+</Warning>
+
+## Comparison with Other Sorts
+
+| Feature | Selection Sort | Insertion Sort | Bubble Sort |
+|---------|---------------|----------------|-------------|
+| Time Complexity | Always O(n²) | O(n) to O(n²) | O(n) to O(n²) |
+| Swaps | O(n) | O(n²) | O(n²) |
+| Stable | No | Yes | Yes |
+| Adaptive | No | Yes | Can be |
+| Best for | Minimizing swaps | Nearly sorted data | Teaching |

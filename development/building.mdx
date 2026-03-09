@@ -1,0 +1,236 @@
+---
+title: Building from Source
+description: Complete guide to building the Sorting Algorithms Visualiser from source code
+---
+
+## Prerequisites
+
+Before building the project, ensure you have the following installed:
+
+- **C++ compiler with C++20 support** (the project uses `stdcpp20`)
+- **vcpkg package manager** for dependency management
+- **Visual Studio 2019 or later** (Platform Toolset v143 or higher recommended)
+- **Git** for cloning the repository
+- **Windows 10 SDK** (specified in the project configuration)
+
+<Note>
+The project is configured for Windows using Visual Studio, with support for both x86 and x64 platforms.
+</Note>
+
+## Build Process
+
+<Steps>
+  <Step title="Clone the repository">
+    Clone the Sorting Algorithms Visualiser repository from GitHub:
+
+    ```bash
+    git clone https://github.com/DevBoiAgru/SortingAlgorithmsVisualiser.git
+    cd SortingAlgorithmsVisualiser/source
+    ```
+  </Step>
+
+  <Step title="Install vcpkg (if not already installed)">
+    If you don't have vcpkg installed, follow these instructions:
+
+    ```powershell
+    # Clone vcpkg
+    git clone https://github.com/microsoft/vcpkg.git
+    cd vcpkg
+
+    # Bootstrap vcpkg
+    .\bootstrap-vcpkg.bat
+
+    # Integrate with Visual Studio
+    .\vcpkg integrate install
+    ```
+
+    <Note>
+    The project uses vcpkg manifest mode (`vcpkg.json`), so dependencies are managed automatically.
+    </Note>
+  </Step>
+
+  <Step title="Install dependencies">
+    The project uses vcpkg manifest mode, which automatically installs dependencies when you build. However, you can manually install SFML if needed:
+
+    ```powershell
+    vcpkg install sfml:x64-windows
+    # Or for 32-bit
+    vcpkg install sfml:x86-windows
+    ```
+
+    The `vcpkg.json` file specifies SFML version 2.6.2 as the only dependency.
+  </Step>
+
+  <Step title="Build with Visual Studio">
+    Open the solution file and build:
+
+    ```powershell
+    # Open the solution in Visual Studio
+    start SortingAlgos.sln
+    ```
+
+    In Visual Studio:
+    1. Select your desired configuration (Debug or Release)
+    2. Select your platform (x86 or x64)
+    3. Build the solution (F7 or Build → Build Solution)
+
+    The compiled executable will be in:
+    - `x64/Debug/SortingAlgos.exe` (Debug x64)
+    - `x64/Release/SortingAlgos.exe` (Release x64)
+    - `Debug/SortingAlgos.exe` (Debug x86)
+    - `Release/SortingAlgos.exe` (Release x86)
+  </Step>
+</Steps>
+
+## Visual Studio Build Configuration
+
+The project includes the following build configurations:
+
+### Debug Configuration
+- **Warning Level**: Level3
+- **SDL Check**: Enabled
+- **Language Standard**: C++20 (for x64)
+- **Debug Information**: Full
+- **Subsystem**: Console
+
+### Release Configuration
+- **Warning Level**: Level3
+- **Optimization**: Function-level linking and intrinsic functions enabled
+- **Language Standard**: C++20 (for x64)
+- **Whole Program Optimization**: Enabled
+- **Subsystem**: Console (with Windows entry point via pragma comment)
+
+## Alternative Build Methods
+
+### Command Line Build with MSBuild
+
+You can also build the project from the command line using MSBuild:
+
+```powershell
+# Open Visual Studio Developer Command Prompt or PowerShell
+# Build Release x64 configuration
+msbuild SortingAlgos.sln /p:Configuration=Release /p:Platform=x64
+
+# Build Debug x64 configuration
+msbuild SortingAlgos.sln /p:Configuration=Debug /p:Platform=x64
+```
+
+### CMake (Not currently supported)
+
+The project currently uses Visual Studio project files (`.vcxproj`). A CMake build system is not yet implemented.
+
+<Note>
+If you're interested in adding CMake support to make the project cross-platform, consider contributing! See the [Contributing](/development/contributing) guide.
+</Note>
+
+## Troubleshooting
+
+### SFML Not Found Errors
+
+If you encounter errors like "Cannot open include file: 'SFML/Graphics.hpp'":
+
+<Steps>
+  <Step title="Verify vcpkg integration">
+    Ensure vcpkg is properly integrated with Visual Studio:
+
+    ```powershell
+    vcpkg integrate install
+    ```
+  </Step>
+
+  <Step title="Check manifest mode">
+    Verify that `VcpkgEnableManifest` is set to `true` in the project file (it should be by default).
+  </Step>
+
+  <Step title="Clean and rebuild">
+    Clean the solution and rebuild:
+    - Build → Clean Solution
+    - Build → Rebuild Solution
+  </Step>
+</Steps>
+
+### Linker Errors
+
+If you encounter linker errors like "unresolved external symbol" related to SFML:
+
+<Warning>
+Ensure you're building for the correct platform (x86 vs x64) and that SFML is installed for that platform in vcpkg.
+</Warning>
+
+```powershell
+# Check installed packages
+vcpkg list
+
+# You should see something like:
+# sfml:x64-windows    2.6.2    Simple and Fast Multimedia Library
+```
+
+If SFML is missing for your target platform:
+
+```powershell
+# Install for x64
+vcpkg install sfml:x64-windows
+
+# Or for x86
+vcpkg install sfml:x86-windows
+```
+
+### vcpkg Configuration Issues
+
+If vcpkg is not finding dependencies:
+
+1. **Check the vcpkg-configuration.json**: The project uses a specific vcpkg baseline. Ensure your vcpkg installation is up to date:
+
+   ```powershell
+   cd path/to/vcpkg
+   git pull
+   ```
+
+2. **Verify the baseline**: The project uses baseline `b1b19307e2d2ec1eefbdb7ea069de7d4bcd31f01` from the Microsoft vcpkg repository.
+
+3. **Reset vcpkg cache**: If dependencies are corrupted:
+
+   ```powershell
+   vcpkg remove sfml
+   vcpkg install sfml
+   ```
+
+### Missing Assets
+
+If the application fails to load fonts at runtime:
+
+<Warning>
+Ensure the `assets` folder is in the same directory as the executable, or copy the assets folder to the output directory.
+</Warning>
+
+The application expects:
+- `assets/Roboto-Regular.ttf` - The font file for UI text
+- `assets/Algo.png` - Application icon
+
+### Platform Toolset Version
+
+If you see errors about platform toolset v145 not being found:
+
+1. Open the project properties
+2. Go to Configuration Properties → General
+3. Change "Platform Toolset" to your installed version (e.g., v143 for VS 2022)
+4. Save and rebuild
+
+## Running the Application
+
+After building successfully, run the executable:
+
+```powershell
+# Run with default settings
+.\x64\Release\SortingAlgos.exe
+
+# Run with custom delay (in nanoseconds)
+.\x64\Release\SortingAlgos.exe 10
+
+# Get help
+.\x64\Release\SortingAlgos.exe --help
+```
+
+<Note>
+The delay parameter controls the wait time between each comparison operation, allowing you to slow down or speed up the visualization.
+</Note>

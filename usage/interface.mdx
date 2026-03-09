@@ -1,0 +1,142 @@
+---
+title: "Interactive Interface"
+description: "Understanding the visual layout and interactive controls of the Sorting Algorithms Visualiser"
+---
+
+## Window Layout
+
+The application runs in a fixed window with dimensions of **1080x720 pixels** (defined by `WINDOW_X` and `WINDOW_Y` constants). The interface is divided into three main areas:
+
+1. **Control Panel** - Top section with utility and sorting buttons
+2. **List Size Display** - Center-top showing the current array size
+3. **Visualization Area** - Main area displaying the sorting process
+
+## Control Buttons
+
+The interface features several interactive buttons organized by function:
+
+<CardGroup cols={2}>
+  <Card title="Utility Buttons" icon="wrench">
+    Control the data and application behavior
+  </Card>
+  <Card title="Algorithm Buttons" icon="code">
+    Execute different sorting algorithms
+  </Card>
+</CardGroup>
+
+### Utility Buttons (Top Row)
+
+Located at the top of the window, these buttons control the array state:
+
+- **Shuffle** - Blue button (RGB: 0, 0, 255)
+  - Position: `(10, 10)`
+  - Size: `160×70 pixels`
+  - Randomly shuffles the array elements
+
+- **Reverse** - Pink/Magenta button (RGB: 160, 15, 78)
+  - Position: `(180, 10)`
+  - Size: `160×70 pixels`
+  - Reverses the current array order
+
+- **Refresh** - Green button (RGB: 127, 200, 101)
+  - Position: `(760, 10)` (WINDOW_X - 320)
+  - Size: `160×70 pixels`
+  - Resets the array to sequential order (1, 2, 3, ...)
+
+- **Quit** - Red button (RGB: 180, 0, 0)
+  - Position: `(930, 10)` (WINDOW_X - 150)
+  - Size: `140×70 pixels`
+  - Exits the application
+
+### List Size Controls (Center Top)
+
+Located in the center-top area, these buttons adjust the array size:
+
+- **Minus (-)** Button - Dark blue (RGB: 6, 57, 113)
+  - Position: `(400, 10)` (WINDOW_X/2 - 140)
+  - Size: `70×70 pixels`
+  - Decreases list size by 10 (or by 5 if size ≤ 10)
+  
+- **Plus (+)** Button - Dark green (RGB: 44, 85, 69)
+  - Position: `(610, 10)` (WINDOW_X/2 + 70)
+  - Size: `70×70 pixels`
+  - Increases list size by 10 (or by 5 if size is exactly 5)
+
+### Algorithm Buttons (Second Row)
+
+Located below the utility buttons at y-position `90`, these trigger sorting algorithms:
+
+1. **Selection Sort** - Pink (RGB: 215, 45, 109)
+   - Position: `(10, 90)` | Size: `210×70 pixels`
+
+2. **Bubble Sort** - Cyan (RGB: 0, 200, 200)
+   - Position: `(230, 90)` | Size: `170×70 pixels`
+
+3. **Insertion Sort** - Purple (RGB: 150, 100, 200)
+   - Position: `(410, 90)` | Size: `190×70 pixels`
+
+4. **Quick Sort** - Pink (RGB: 215, 45, 109)
+   - Position: `(610, 90)` | Size: `150×70 pixels`
+
+5. **Bogo Sort** - Olive green (RGB: 137, 172, 118)
+   - Position: `(770, 90)` | Size: `140×70 pixels`
+
+6. **Stalin Sort** - Bright red (RGB: 255, 0, 0)
+   - Position: `(920, 90)` | Size: `150×70 pixels`
+
+## List Size Display
+
+The current array size is displayed at the top-center of the window:
+
+- **Position**: Center of screen `(WINDOW_X/2, 30)`
+- **Format**: Three-digit number with leading zeros (e.g., "250", "050", "010")
+- **Font Size**: 40 pixels
+- **Default Size**: 250 elements
+- **Updates**: Automatically when +/- buttons are clicked
+
+## Visualization Area
+
+The main visualization area displays the array as vertical rectangles:
+
+### Rectangle Properties
+
+- **Width**: Dynamically calculated as `(WINDOW_X - 2*SIDEOFFSET) / LIST_SIZE`
+- **Height**: Proportional to element value, using a height factor of `0.5` (takes up half the screen)
+- **Margin**: 50 pixels from edges (`SIDEOFFSET`)
+- **Positioning**: Bottom-aligned, extending upward based on value
+
+### Color Coding
+
+During sorting operations, elements are highlighted to show comparisons:
+
+<CardGroup cols={3}>
+  <Card title="Red Highlight" icon="square" color="#ff0000">
+    **highlight1** - First element being compared or examined
+  </Card>
+  <Card title="Green Highlight" icon="square" color="#00ff00">
+    **highlight2** - Second element being compared
+  </Card>
+  <Card title="Blue Highlight" icon="square" color="#0000ff">
+    **highlight3** - Third element or verification pass indicator
+  </Card>
+</CardGroup>
+
+### Highlight Usage by Algorithm
+
+- **Bubble Sort**: Red and green show adjacent elements being compared
+- **Selection Sort**: Green shows current position, red/blue show candidates
+- **Insertion Sort**: Red shows element being inserted, green shows current position
+- **Quick Sort**: Green and blue show partition elements
+- **Stalin Sort**: Shows elements being compared and removed
+- **Verification**: Blue sweeps across array to confirm sorting is complete
+
+<Note>
+  Most buttons are disabled during sorting operations to prevent conflicts. The `canClick` flag ensures only one operation runs at a time.
+</Note>
+
+## Interaction Behavior
+
+- **Click Detection**: Buttons respond to mouse clicks within their boundaries
+- **Thread Safety**: Each sorting algorithm runs in a separate thread
+- **Visual Updates**: The display updates continuously during sorting
+- **Button Locking**: Utility buttons are disabled while a sort is running

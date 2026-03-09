@@ -1,0 +1,328 @@
+---
+title: "Customization"
+description: "Modify source code constants to customize window size, performance, and visual behavior"
+---
+
+## Overview
+
+The Sorting Algorithms Visualiser can be customized by modifying constants in the source code. After making changes, you'll need to recompile the program.
+
+<Warning>
+  **Recompilation Required**: All customizations require rebuilding the project. Changes to constants in header and source files will not take effect until you recompile.
+</Warning>
+
+## Window Configuration
+
+These constants in `SortingAlgos.h:12-14` control the window dimensions:
+
+### WINDOW_X (Width)
+
+```cpp
+constexpr int WINDOW_X = 1080;
+```
+
+- **Default**: 1080 pixels
+- **Description**: Width of the application window
+- **Recommendations**: 
+  - Minimum: 800 pixels (to fit all buttons)
+  - Maximum: Limited by your screen resolution
+  - Keep as a multiple of common button widths (70, 140, 160)
+
+### WINDOW_Y (Height)
+
+```cpp
+constexpr int WINDOW_Y = 720;
+```
+
+- **Default**: 720 pixels
+- **Description**: Height of the application window
+- **Recommendations**:
+  - Minimum: 400 pixels (to accommodate buttons + visualization)
+  - Maximum: Limited by your screen resolution
+  - Consider the `heightFactor` (0.5) when increasing
+
+### SIDEOFFSET (Margins)
+
+```cpp
+constexpr int SIDEOFFSET = 50;
+```
+
+- **Default**: 50 pixels
+- **Description**: Margin from the left and right edges of the window
+- **Effect**: Creates padding around the visualization rectangles
+- **Recommendations**:
+  - Smaller values: More space for rectangles
+  - Larger values: Better visual separation from edges
+
+## Array Configuration
+
+Control the default array size in `SortingAlgos.cpp:8`:
+
+### LIST_SIZE (Default Array Size)
+
+```cpp
+int LIST_SIZE = 250;
+```
+
+- **Default**: 250 elements
+- **Description**: Initial number of elements in the array
+- **Runtime Adjustable**: Yes, using +/- buttons in the interface
+- **Recommendations**:
+  - Small arrays (10-50): Good for slow algorithms like Bogo Sort
+  - Medium arrays (100-300): Balanced visualization
+  - Large arrays (500+): May cause performance issues with large delays
+
+<Note>
+  Users can adjust `LIST_SIZE` at runtime using the +/- buttons, but this value sets the initial default.
+</Note>
+
+## Performance Configuration
+
+These settings control algorithm execution speed:
+
+### SORT_DELAY (Operation Delay)
+
+```cpp
+int SORT_DELAY = 1;  // in nanoseconds
+```
+
+- **Default**: 1 nanosecond
+- **Description**: Delay between each comparison/swap operation
+- **Runtime Configurable**: Yes, via command-line argument
+- **Effect**: Controls visualization speed
+- **Location**: `SortingAlgos.h:18`
+
+<Accordion title="Why SORT_DELAY is not constexpr">
+  Unlike other constants, `SORT_DELAY` is declared as `int` instead of `constexpr int` because it can be modified at runtime through command-line arguments. This allows users to adjust visualization speed without recompiling.
+</Accordion>
+
+### MAX_BOGOSORT_ITERATIONS (Bogo Sort Limit)
+
+```cpp
+constexpr int MAX_BOGOSORT_ITERATIONS = 1000000;
+```
+
+- **Default**: 1,000,000 iterations
+- **Description**: Maximum number of shuffle attempts for Bogo Sort
+- **Why It Exists**: Prevents infinite loops on large arrays
+- **Location**: `SortingAlgos.h:15`
+- **Recommendations**:
+  - Increase for larger arrays or if Bogo Sort times out
+  - Decrease to fail faster on impossible cases
+
+<Warning>
+  Bogo Sort has O(n!) average time complexity. Even with 1 million iterations, it may fail to sort arrays larger than 10 elements.
+</Warning>
+
+## Visualization Configuration
+
+### Height Factor
+
+From `SortingAlgos.cpp:170`:
+
+```cpp
+double heightFactor = static_cast<double>(WINDOW_Y) / maxNumber(numbers) * 0.5;
+```
+
+- **Current Value**: `0.5` (uses half the screen height)
+- **Description**: Determines how tall the rectangles can grow
+- **Calculation**: `(WINDOW_Y / max_value) × 0.5`
+- **Effect**: 
+  - `0.5` = rectangles use up to 50% of window height
+  - `1.0` = rectangles could fill entire window height
+  - `0.25` = rectangles limited to 25% of height
+
+<Accordion title="Customizing Height Factor">
+  To change the visualization height:
+  
+  1. Open `SortingAlgos.cpp`
+  2. Find line 170 in the `drawRectangles()` function
+  3. Change `0.5` to your desired factor (e.g., `0.7` for 70% height)
+  4. Recompile the project
+  
+  **Example:**
+  ```cpp
+  // Original
+  double heightFactor = static_cast<double>(WINDOW_Y) / maxNumber(numbers) * 0.5;
+  
+  // Modified (uses 75% of screen)
+  double heightFactor = static_cast<double>(WINDOW_Y) / maxNumber(numbers) * 0.75;
+  ```
+</Accordion>
+
+## Button Customization
+
+### Button Positions and Sizes
+
+All buttons are defined in `SortingAlgos.cpp:48-129`. Each button follows this structure:
+
+```cpp
+Button(
+    std::string("Button Text"),
+    sf::Vector2f(x_position, y_position),
+    sf::Vector2f(width, height),
+    sf::Color(red, green, blue),
+    font,
+    []() { /* callback function */ }
+)
+```
+
+### Example: Moving a Button
+
+To move the Shuffle button from `(10, 10)` to `(20, 20)`:
+
+```cpp
+// Original (line 49-53)
+Button(
+    std::string("Shuffle"),
+    sf::Vector2f(10.f, 10.f),  // Change this line
+    sf::Vector2f(160.f, 70.f),
+    sf::Color(0, 0, 255), font, []() {if (canClick) std::shuffle(numbers.begin(), numbers.end(), randomGen); }),
+
+// Modified
+Button(
+    std::string("Shuffle"),
+    sf::Vector2f(20.f, 20.f),  // New position
+    sf::Vector2f(160.f, 70.f),
+    sf::Color(0, 0, 255), font, []() {if (canClick) std::shuffle(numbers.begin(), numbers.end(), randomGen); }),
+```
+
+### Example: Changing Button Colors
+
+To change the Bubble Sort button from cyan to orange:
+
+```cpp
+// Original (line 105-108)
+Button(
+    std::string("Bubble sort"),
+    sf::Vector2f(230.f, 90.f),
+    sf::Vector2f(170.f, 70.f),
+    sf::Color(0, 200, 200),  // Cyan - Change this
+    font, []() {if (canClick) { canClick = false; BubbleSort(numbers); canClick = true; resetHighlights();} }),
+
+// Modified
+Button(
+    std::string("Bubble sort"),
+    sf::Vector2f(230.f, 90.f),
+    sf::Vector2f(170.f, 70.f),
+    sf::Color(255, 165, 0),  // Orange
+    font, []() {if (canClick) { canClick = false; BubbleSort(numbers); canClick = true; resetHighlights();} }),
+```
+
+## Highlight Colors
+
+The three highlight colors used during sorting are defined in `SortingAlgos.cpp:178-183`:
+
+```cpp
+if (i == highlight1)
+    rect.setFillColor(sf::Color(255, 0, 0));      // Red
+else if (i == highlight2)
+    rect.setFillColor(sf::Color(0, 255, 0));      // Green
+else if (i == highlight3)
+    rect.setFillColor(sf::Color(0, 0, 255));      // Blue
+```
+
+### Customizing Highlight Colors
+
+<Accordion title="Example: Change to Yellow/Magenta/Cyan">
+  ```cpp
+  if (i == highlight1)
+      rect.setFillColor(sf::Color(255, 255, 0));    // Yellow
+  else if (i == highlight2)
+      rect.setFillColor(sf::Color(255, 0, 255));    // Magenta
+  else if (i == highlight3)
+      rect.setFillColor(sf::Color(0, 255, 255));    // Cyan
+  ```
+</Accordion>
+
+## Recompilation Process
+
+After making any changes to the source code:
+
+1. **Save all modified files**
+2. **Clean the build** (removes old compiled objects)
+3. **Rebuild the project** using your build system
+
+### Common Build Commands
+
+<CodeGroup>
+```bash CMake
+cmake --build build --clean-first
+```
+
+```bash Make
+make clean
+make
+```
+
+```bash Visual Studio
+# In Visual Studio:
+# Build → Clean Solution
+# Build → Rebuild Solution
+```
+</CodeGroup>
+
+<Note>
+  The exact build commands depend on your project setup. Refer to the project's build documentation for specific instructions.
+</Note>
+
+## Advanced Customizations
+
+<Accordion title="Adding a New Sorting Algorithm Button">
+  To add a new sorting algorithm:
+  
+  1. **Implement the algorithm** in `SortingAlgos.h`
+  2. **Add a button** to the `buttons` vector in `SortingAlgos.cpp:48-129`
+  3. **Position the button** to avoid overlapping with existing buttons
+  4. **Choose a unique color** for visual distinction
+  
+  **Example:**
+  ```cpp
+  Button(
+      std::string("Merge Sort"),
+      sf::Vector2f(10.f, 170.f),     // Below algorithm buttons
+      sf::Vector2f(150.f, 70.f),
+      sf::Color(100, 150, 255),       // Light blue
+      font,
+      []() {
+          if (canClick) {
+              canClick = false;
+              MergeSort(numbers);      // Your implementation
+              canClick = true;
+              resetHighlights();
+          }
+      }
+  ),
+  ```
+</Accordion>
+
+<Accordion title="Changing the Font">
+  The font is loaded from `assets/Roboto-Regular.ttf` at line 36:
+  
+  ```cpp
+  font.loadFromFile("assets/Roboto-Regular.ttf");
+  ```
+  
+  To change the font:
+  1. Place your `.ttf` font file in the `assets/` directory
+  2. Update the path in the code
+  3. Recompile
+  
+  **Example:**
+  ```cpp
+  font.loadFromFile("assets/Arial.ttf");
+  ```
+</Accordion>
+
+<Accordion title="Adjusting List Size Display">
+  The list size display (center-top) is configured at lines 37-46 and 154-157:
+  
+  - **Character size**: Line 41 - `listNum.setCharacterSize(40);`
+  - **Position**: Line 156 - `listNum.setPosition(sf::Vector2f(WINDOW_X / 2, 30));`
+  - **Format**: Line 39 - Three digits with leading zeros
+  
+  To change the font size to 50:
+  ```cpp
+  listNum.setCharacterSize(50);  // Larger text
+  ```
+</Accordion>

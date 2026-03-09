@@ -1,0 +1,334 @@
+---
+title: Contributing
+description: Guide for contributing to the Sorting Algorithms Visualiser project
+---
+
+## Welcome Contributors!
+
+Thank you for your interest in contributing to the Sorting Algorithms Visualiser! This project is open source and welcomes contributions from developers of all skill levels.
+
+<Info>
+First-time contributors are especially welcome! Don't hesitate to ask questions or request guidance through GitHub issues or pull requests.
+</Info>
+
+## Ways to Contribute
+
+<CardGroup cols={2}>
+  <Card title="Report Bugs" icon="bug">
+    Found a bug? Open an issue on GitHub with detailed reproduction steps and your environment details.
+  </Card>
+
+  <Card title="Suggest New Algorithms" icon="lightbulb">
+    Have an interesting sorting algorithm to visualize? Propose it through a GitHub issue or implement it directly!
+  </Card>
+
+  <Card title="Improve Documentation" icon="book">
+    Help others understand the project better by improving code comments, README files, or adding usage examples.
+  </Card>
+
+  <Card title="Optimize Performance" icon="gauge">
+    Identify and fix performance bottlenecks, optimize rendering, or improve algorithm efficiency.
+  </Card>
+
+  <Card title="Add New Features" icon="plus">
+    Enhance the visualizer with:
+    - Additional UI controls
+    - New color schemes
+    - Sound effects for comparisons
+    - Adjustable animation speeds
+    - Different visualization modes
+  </Card>
+
+  <Card title="Code Quality" icon="code">
+    Refactor code, improve structure, add error handling, or modernize C++ usage.
+  </Card>
+</CardGroup>
+
+## Getting Started
+
+<Steps>
+  <Step title="Fork the repository">
+    Create your own fork of the project:
+
+    1. Visit [github.com/DevBoiAgru/SortingAlgorithmsVisualiser](https://github.com/DevBoiAgru/SortingAlgorithmsVisualiser)
+    2. Click the "Fork" button in the top-right corner
+    3. Clone your fork locally:
+
+    ```bash
+    git clone https://github.com/YOUR-USERNAME/SortingAlgorithmsVisualiser.git
+    cd SortingAlgorithmsVisualiser
+    ```
+  </Step>
+
+  <Step title="Create a feature branch">
+    Create a new branch for your changes:
+
+    ```bash
+    git checkout -b feature/your-feature-name
+    ```
+
+    Use descriptive branch names:
+    - `feature/add-radix-sort`
+    - `fix/font-loading-error`
+    - `docs/improve-readme`
+    - `refactor/sorting-functions`
+  </Step>
+
+  <Step title="Set up the development environment">
+    Follow the [Building from Source](/development/building) guide to set up your development environment and build the project.
+
+    Ensure you can successfully:
+    - Build the project
+    - Run the application
+    - Make and test changes
+  </Step>
+
+  <Step title="Make your changes">
+    Implement your feature, fix, or improvement:
+
+    - Write clean, readable code
+    - Follow the existing code style
+    - Add comments for complex logic
+    - Test your changes thoroughly
+  </Step>
+
+  <Step title="Test thoroughly">
+    Before submitting, test your changes:
+
+    - Build in both Debug and Release configurations
+    - Test on x86 and x64 platforms (if applicable)
+    - Verify the application runs correctly
+    - Test edge cases and error conditions
+    - Ensure existing functionality still works
+  </Step>
+
+  <Step title="Commit your changes">
+    Create meaningful commit messages:
+
+    ```bash
+    git add .
+    git commit -m "Add radix sort algorithm with visualization"
+    ```
+
+    Good commit message examples:
+    - `Fix font loading error on startup`
+    - `Add command-line argument for window size`
+    - `Optimize rendering for large list sizes`
+    - `Refactor button creation into separate class`
+  </Step>
+
+  <Step title="Push and create a pull request">
+    Push your branch to GitHub:
+
+    ```bash
+    git push origin feature/your-feature-name
+    ```
+
+    Then create a pull request:
+    1. Go to your fork on GitHub
+    2. Click "Compare & pull request"
+    3. Fill in the PR template with details
+    4. Submit the pull request
+  </Step>
+</Steps>
+
+## Code Style Guidelines
+
+To maintain consistency across the codebase:
+
+### Naming Conventions
+
+```cpp
+// Variables: camelCase
+int listSize = 250;
+bool canClick = true;
+
+// Constants: UPPER_SNAKE_CASE
+const int WINDOW_X = 1280;
+const int WINDOW_Y = 720;
+
+// Functions: camelCase
+void HighlightRectangles(int current, int next, int prev);
+bool is_number(const std::string& s);
+
+// Classes: PascalCase
+class Button {
+    // ...
+};
+```
+
+### Code Organization
+
+- **Keep functions focused**: Each function should do one thing well
+- **Use meaningful names**: Variable and function names should be self-documenting
+- **Comment complex logic**: Especially algorithm implementations
+- **Avoid magic numbers**: Use named constants instead
+
+### Example: Adding a New Sorting Algorithm
+
+```cpp
+// Good: Clear function name and comments
+void RadixSort() {
+    if (!canClick) return;
+    canClick = false;
+    
+    // Find the maximum number to determine digit count
+    int maxNum = *std::max_element(numbers.begin(), numbers.end());
+    
+    // Perform counting sort for each digit
+    for (int exp = 1; maxNum / exp > 0; exp *= 10) {
+        CountingSortByDigit(exp);
+    }
+    
+    canClick = true;
+}
+```
+
+### Formatting
+
+- **Indentation**: Use consistent indentation (the project uses 4 spaces)
+- **Braces**: Opening brace on same line for functions and control structures
+- **Spacing**: Space after keywords (`if`, `for`, `while`), around operators
+- **Line length**: Keep lines reasonably short (under 120 characters when possible)
+
+## Pull Request Guidelines
+
+When submitting a pull request:
+
+### PR Description Should Include:
+
+1. **What**: Brief description of changes
+2. **Why**: Reason for the changes
+3. **How**: Technical approach (if not obvious)
+4. **Testing**: How you tested the changes
+5. **Screenshots**: For UI changes, include before/after screenshots
+
+### Example PR Template:
+
+```markdown
+## Description
+Adds visualization for Radix Sort algorithm
+
+## Motivation
+Radix Sort is a non-comparative sorting algorithm that can be faster than
+comparison-based sorts for certain data types. This adds variety to the
+available sorting algorithms.
+
+## Changes
+- Implemented RadixSort() function
+- Added "Radix Sort" button to UI
+- Updated button layout to accommodate new algorithm
+
+## Testing
+- Tested with list sizes from 5 to 500
+- Verified correct sorting behavior
+- Checked performance on Debug and Release builds
+- Tested on x64 Windows 11
+
+## Screenshots
+[Include screenshot of the new button and algorithm in action]
+```
+
+### PR Checklist:
+
+- [ ] Code follows the project's style guidelines
+- [ ] Changes have been tested thoroughly
+- [ ] No compiler warnings introduced
+- [ ] Comments added for complex code
+- [ ] PR description is clear and complete
+- [ ] Branch is up to date with main
+
+## Reporting Bugs
+
+When reporting bugs, include:
+
+- **Description**: Clear description of the bug
+- **Steps to Reproduce**: Detailed steps to reproduce the issue
+- **Expected Behavior**: What should happen
+- **Actual Behavior**: What actually happens
+- **Environment**:
+  - OS version (e.g., Windows 11)
+  - Visual Studio version
+  - Build configuration (Debug/Release, x86/x64)
+  - SFML version
+- **Screenshots/Videos**: If applicable
+- **Error Messages**: Full error messages or stack traces
+
+## Feature Requests
+
+For feature requests, describe:
+
+- **Feature Description**: What you want to add
+- **Use Case**: Why this feature would be useful
+- **Proposed Implementation**: If you have ideas on how to implement it
+- **Alternatives**: Other approaches you've considered
+
+## Code Review Process
+
+1. **Automated Checks**: Ensure your PR passes any automated checks
+2. **Maintainer Review**: A project maintainer will review your changes
+3. **Feedback**: Address any requested changes or questions
+4. **Approval**: Once approved, your PR will be merged
+5. **Recognition**: Contributors are acknowledged in release notes
+
+## Project License
+
+This project is licensed under the **MIT License**. By contributing, you agree that your contributions will be licensed under the same license.
+
+<Card title="MIT License" icon="scale-balanced">
+  Copyright (c) 2024 DevBoiAgru
+  
+  The MIT License is a permissive license that allows:
+  - Commercial use
+  - Modification
+  - Distribution
+  - Private use
+  
+  See the [LICENSE](https://github.com/DevBoiAgru/SortingAlgorithmsVisualiser/blob/main/LICENSE) file for full details.
+</Card>
+
+## Getting Help
+
+If you need help:
+
+- **GitHub Issues**: Ask questions in a new issue
+- **Pull Requests**: Request feedback in your PR
+- **Code Comments**: Check existing code for examples
+- **Documentation**: Review the [Building](/development/building) and [Dependencies](/development/dependencies) pages
+
+## Suggested Contributions
+
+Looking for ideas? Here are some suggested improvements:
+
+### Easy (Good for beginners):
+- Add more color schemes
+- Improve error messages
+- Add keyboard shortcuts
+- Update README with usage examples
+
+### Medium:
+- Implement additional sorting algorithms (Radix, Bucket, Shell sort)
+- Add algorithm complexity information display
+- Create a settings menu for customization
+- Add sound effects for comparisons/swaps
+
+### Advanced:
+- Port to cross-platform (Linux/macOS support)
+- Add CMake build system
+- Implement algorithm comparison mode (run multiple algorithms simultaneously)
+- Add recording/export functionality (save visualization as video)
+- Create algorithm step-by-step mode with explanations
+
+## Community Guidelines
+
+- Be respectful and constructive
+- Welcome newcomers and help them learn
+- Focus on technical merit, not personal opinions
+- Give credit where credit is due
+- Have fun and learn together!
+
+---
+
+<Card title="Ready to Contribute?" icon="rocket" href="https://github.com/DevBoiAgru/SortingAlgorithmsVisualiser">
+  Visit the GitHub repository to get started!
+</Card>

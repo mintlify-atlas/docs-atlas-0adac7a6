@@ -1,0 +1,179 @@
+---
+title: Bogo Sort
+description: A highly inefficient randomized sorting algorithm that repeatedly shuffles the array until it happens to be sorted - primarily used for educational and humorous purposes.
+---
+
+## Overview
+
+Bogo Sort (also known as "Stupid Sort" or "Random Sort") is a particularly ineffective sorting algorithm based on the generate-and-test paradigm. It repeatedly shuffles the array randomly and checks if it's sorted. While theoretically correct, it's one of the worst sorting algorithms ever conceived and is used primarily for educational purposes to demonstrate algorithmic inefficiency.
+
+## Complexity
+
+- **Time Complexity**: 
+  - Best case: O(n) - array is already sorted or gets sorted on first shuffle
+  - Average case: O((n+1)!) - factorial time!
+  - Worst case: **Unbounded** - could theoretically run forever
+- **Space Complexity**: O(1) - shuffles in-place
+- **Stable**: No - random shuffling destroys any order
+
+<Warning>
+  With average time complexity of O((n+1)!), Bogo Sort is **extremely inefficient**. For a 10-element array, it takes on average 39.9 million iterations. For 13 elements, it would take longer than the age of the universe!
+</Warning>
+
+## Implementation
+
+Here's the actual implementation from the Sorting Algorithms Visualiser:
+
+```cpp
+void BogoSort(std::vector<int>& nums) {
+	int counter = 0;
+	while (counter < MAX_BOGOSORT_ITERATIONS) {
+		if (!isSorted(nums)) {
+			std::shuffle(nums.begin(), nums.end(), randomGen);
+			counter++;
+		}
+		else {
+			Verify(nums);
+			break;
+		}
+	}
+	return;
+}
+```
+
+The helper function to check if array is sorted:
+
+```cpp
+bool isSorted(std::vector<int> nums){
+	if (nums.size() == 0 || nums.size() == 1)
+		return true;
+	for (int i = 1; i < nums.size(); i++)
+		if (nums[i - 1] > nums[i])
+			return false;
+	return true;
+}
+```
+
+Note the safety constant from `SortingAlgos.h`:
+```cpp
+constexpr int MAX_BOGOSORT_ITERATIONS = 1000000;
+```
+
+## How It Works
+
+1. **Initialize counter**: Start with `counter = 0`
+2. **Check if sorted**: Call `isSorted()` to verify if array is in order
+3. **If not sorted**:
+   - Randomly shuffle the entire array using `std::shuffle()`
+   - Increment the counter
+4. **If sorted**:
+   - Call `Verify()` to highlight each element
+   - Break out of the loop
+5. **Safety limit**: Stop after `MAX_BOGOSORT_ITERATIONS` (1,000,000) to prevent infinite loops
+
+### Step-by-Step Example
+
+For a small array `[3, 1, 2]`:
+
+**Attempt 1**: Shuffle → `[2, 3, 1]` - Not sorted
+**Attempt 2**: Shuffle → `[1, 3, 2]` - Not sorted
+**Attempt 3**: Shuffle → `[3, 2, 1]` - Not sorted
+**Attempt 4**: Shuffle → `[2, 1, 3]` - Not sorted
+**Attempt 5**: Shuffle → `[1, 2, 3]` - **Sorted!** ✓
+
+For this 3-element array, there are 3! = 6 possible permutations. On average, you'd need 3 shuffles to randomly land on the sorted order.
+
+## Watch It in Action
+
+When running the visualiser:
+
+- The array will rapidly shuffle randomly
+- You'll see elements jumping to random positions
+- **No specific color highlighting** during shuffling (unlike other algorithms)
+- The algorithm continues until it randomly achieves sorted order
+- Once sorted, the verification phase highlights each element in blue
+
+<Info>
+  Unlike other sorting algorithms that show step-by-step comparisons, Bogo Sort just shows random shuffling. The lack of systematic progress is part of what makes it so inefficient!
+</Info>
+
+## Why It's So Inefficient
+
+### Probability Analysis
+
+For an array of size `n`, there are `n!` possible permutations. Only 1 of these is the sorted order.
+
+- Probability of getting sorted on any single shuffle: **1/n!**
+- Expected number of shuffles: **n!**
+
+### Real-World Examples
+
+| Array Size | Permutations | Average Shuffles | Approximate Time (at 1M shuffles/sec) |
+|------------|-------------|------------------|---------------------------------------|
+| 5 elements | 120 | 120 | 0.00012 seconds |
+| 10 elements | 3,628,800 | 3,628,800 | 3.6 seconds |
+| 13 elements | 6,227,020,800 | 6.2 billion | 1.7 hours |
+| 15 elements | 1.3 trillion | 1.3 trillion | 15 days |
+| 20 elements | 2.4 × 10¹⁸ | 2.4 quintillion | 77 million years |
+
+<Warning>
+  The implementation includes `MAX_BOGOSORT_ITERATIONS = 1,000,000` as a safety limit. Even with this, Bogo Sort will likely fail to sort arrays larger than 10-11 elements before hitting the iteration limit.
+</Warning>
+
+## Use Cases
+
+**Educational only:**
+- Demonstrating algorithmic inefficiency
+- Teaching computational complexity
+- Showing importance of algorithm design
+- Comic relief in computer science education
+
+**Never use for:**
+- ❌ Production code
+- ❌ Any real sorting task
+- ❌ Performance-critical applications
+- ❌ Large datasets
+- ❌ Literally anything serious
+
+## Advantages
+
+✓ Extremely simple to implement
+✓ Guaranteed to eventually sort (theoretically)
+✓ Excellent teaching tool for complexity theory
+✓ Demonstrates the importance of algorithmic design
+✓ Provides comic relief
+
+## Disadvantages
+
+✗ Factorial time complexity O((n+1)!)
+✗ Unbounded worst case - could run forever
+✗ Completely impractical for any real use
+✗ Makes no progress toward solution
+✗ Extremely wasteful of computational resources
+✗ Not stable, not adaptive, not intelligent
+
+## Variants
+
+### Bogobogo Sort
+Even worse than Bogo Sort! Recursively applies Bogo Sort to progressively larger prefixes. Time complexity: O(n·n!)
+
+### Quantum Bogosort
+A theoretical "algorithm" that:
+1. Randomly shuffles the array
+2. If not sorted, destroy the universe
+3. Only universes with sorted arrays survive
+
+Time complexity: O(n) in universes that survive! (Not recommended for production use)
+
+<Note>
+  Bogo Sort is a perfect example of a correct algorithm that is computationally useless. It proves that correctness alone is not sufficient - efficiency matters!
+</Note>
+
+## Comparison with Real Algorithms
+
+To sort 100 elements:
+- **Bogo Sort**: ~10¹⁵⁷ operations (more atoms than in the universe)
+- **Bubble Sort**: ~10,000 operations
+- **Quick Sort**: ~664 operations
+
+Bogo Sort makes even Bubble Sort look like a masterpiece of efficiency!

@@ -1,80 +1,219 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: "Quick Start"
+description: "Get the Sorting Algorithms Visualiser up and running in minutes"
 ---
 
-## Get started in three steps
+# Quick Start
 
-Get your documentation site running locally and make your first customization.
+Follow these steps to build and run the Sorting Algorithms Visualiser on your system. You'll be visualizing sorting algorithms in just a few minutes!
 
-### Step 1: Set up your local environment
+## Prerequisites
 
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
+Before you begin, make sure you have the following installed:
+
+- **Windows Operating System** (the application is built for Windows)
+- **C++ Compiler**: Visual Studio 2019/2022 or compatible C++ compiler with C++17 support
+- **vcpkg**: Microsoft's C++ package manager for dependency management
+- **Git**: For cloning the repository
+
+<Info>
+  This project uses SFML 2.6.2 for graphics rendering. The dependency is managed automatically through vcpkg.
+</Info>
+
+## Installation Steps
+
+<Steps>
+  <Step title="Clone the Repository">
+    Open your terminal and clone the Sorting Algorithms Visualiser repository:
     
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
+    ```bash
+    git clone https://github.com/DevBoiAgru/Sorting-Algorithms-Visualiser.git
+    cd Sorting-Algorithms-Visualiser
+    ```
     
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
+    This creates a local copy of the project on your machine.
+  </Step>
 
-### Step 2: Deploy your changes
-
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
+  <Step title="Install Dependencies with vcpkg">
+    The project requires SFML (Simple and Fast Multimedia Library). Install it using vcpkg:
     
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+    ```bash
+    vcpkg install sfml:x64-windows
+    ```
+    
+    This command installs SFML version 2.6.2 as specified in `vcpkg.json`.
+    
+    <Note>
+      If you haven't set up vcpkg integration with Visual Studio, run:
+      ```bash
+      vcpkg integrate install
+      ```
+      This allows Visual Studio to automatically find vcpkg packages.
+    </Note>
+  </Step>
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+  <Step title="Build the Project">
+    ### Using Visual Studio
+    
+    1. Open the solution file (`SortingAlgos.sln`) in Visual Studio
+    2. Set the build configuration to **Release** or **Debug** (x64)
+    3. Build the solution: **Build > Build Solution** (or press `Ctrl+Shift+B`)
+    4. The executable will be generated in the output directory
+    
+    ### Using Command Line (MSVC)
+    
+    If you prefer command-line compilation:
+    
+    ```bash
+    cl /EHsc /std:c++17 /I"path\to\vcpkg\installed\x64-windows\include" ^
+       SortingAlgos.cpp /link /LIBPATH:"path\to\vcpkg\installed\x64-windows\lib" ^
+       sfml-graphics.lib sfml-window.lib sfml-system.lib /OUT:SortingAlgos.exe
+    ```
+    
+    <Note>
+      Make sure the `assets/` folder (containing `Roboto-Regular.ttf`) is in the same directory as the executable.
+    </Note>
+  </Step>
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
+  <Step title="Run the Application">
+    Launch the visualizer by running the executable:
+    
+    ```bash
+    SortingAlgos.exe
+    ```
+    
+    A window titled **"Sorting visualiser - DevBoiAgru"** will open, displaying 250 vertical bars representing numbers from 1 to 250.
+  </Step>
 
-### Step 3: Go live
+  <Step title="Try Your First Sort">
+    Now let's visualize a sorting algorithm:
+    
+    1. Click the **"Shuffle"** button (blue, top-left) to randomize the bars
+    2. Click the **"Bubble sort"** button (cyan, second row) to start the algorithm
+    3. Watch as the bars are compared and swapped:
+       - **Red** and **green** highlights show elements being compared
+       - **Blue** highlight appears during the final verification pass
+    4. The algorithm completes when all bars are sorted from shortest to tallest
+    
+    <Info>
+      Try clicking **"Reverse"** to reverse the sorted list, then test a different algorithm like **"Quick sort"** to compare speeds!
+    </Info>
+  </Step>
+</Steps>
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+## Command-Line Usage
 
-## Next steps
+You can control the visualization speed by passing a delay parameter when launching the application:
 
-Now that you have your docs running, explore these key features:
+```bash
+SortingAlgos.exe <delay>
+```
 
-<CardGroup cols={2}>
+- `<delay>`: Time delay between sorting operations in **nanoseconds** (default: 1ns)
 
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
+### Examples
 
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
+```bash
+# Ultra-fast sorting (10 nanoseconds between operations)
+SortingAlgos.exe 10
 
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
+# Slower visualization for educational purposes (100,000 nanoseconds = 0.1ms)
+SortingAlgos.exe 100000
 
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
+# Very slow, step-by-step visualization (10,000,000 nanoseconds = 10ms)
+SortingAlgos.exe 10000000
+```
 
-</CardGroup>
+<Warning>
+  Setting the delay too low (e.g., 1-10ns) may cause the sort to complete almost instantly, making it hard to observe the algorithm's behavior. Start with higher values like 100,000+ for learning.
+</Warning>
+
+### Help Command
+
+To see usage information:
+
+```bash
+SortingAlgos.exe --help
+# or
+SortingAlgos.exe -h
+```
+
+This displays:
+
+```
+Command line usage: sortingalgo <delay between operations in nanoseconds>
+For example:
+    sortingalgos.exe 10
+    This will make it so that the hold between each comparision is 10 nanoseconds.
+```
+
+## Understanding the Interface
+
+When the application launches, you'll see:
+
+- **Top row buttons**: Shuffle, Reverse, list size controls (+/-), Refresh, and Quit
+- **Second row buttons**: Six sorting algorithm buttons (Selection, Bubble, Insertion, Quick, Bogo, Stalin)
+- **Center display**: Current list size (e.g., "250")
+- **Visualization area**: Vertical bars representing the numbers to be sorted
 
 <Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
+  The application window is 1080×720 pixels. Bars are positioned with a 50-pixel offset from the edges.
 </Note>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Missing SFML DLLs">
+    If you get an error about missing DLL files:
+    
+    - Copy SFML DLLs from `vcpkg\installed\x64-windows\bin\` to the same folder as `SortingAlgos.exe`
+    - Required DLLs: `sfml-graphics-2.dll`, `sfml-window-2.dll`, `sfml-system-2.dll`
+  </Accordion>
+  
+  <Accordion title="Font Not Found Error">
+    The application requires `Roboto-Regular.ttf` in the `assets/` folder:
+    
+    ```
+    SortingAlgos.exe
+    assets/
+      └── Roboto-Regular.ttf
+    ```
+    
+    Ensure this structure is maintained when running the executable.
+  </Accordion>
+  
+  <Accordion title="Build Errors with vcpkg">
+    If Visual Studio can't find SFML headers:
+    
+    1. Verify vcpkg integration: `vcpkg integrate install`
+    2. Check that SFML is installed: `vcpkg list`
+    3. Ensure you're building for the correct platform (x64)
+  </Accordion>
+  
+  <Accordion title="Invalid Delay Input">
+    If you see "Invalid delay input" error:
+    
+    - The delay parameter must be a positive integer (no decimals, signs, or letters)
+    - Valid: `SortingAlgos.exe 100000`
+    - Invalid: `SortingAlgos.exe -50`, `SortingAlgos.exe 1.5`, `SortingAlgos.exe slow`
+  </Accordion>
+</AccordionGroup>
+
+## What's Next?
+
+Now that you have the visualizer running, explore these topics:
+
+<CardGroup cols={2}>
+  <Card title="User Interface Guide" icon="desktop" href="/usage/interface">
+    Learn about all the buttons and interactive controls
+  </Card>
+  <Card title="Algorithm Deep Dives" icon="brain" href="/algorithms/bubble-sort">
+    Understand how each sorting algorithm works under the hood
+  </Card>
+  <Card title="Build from Source" icon="code" href="/development/building">
+    Explore the build process and compilation details
+  </Card>
+  <Card title="Contributing" icon="code-pull-request" href="/development/contributing">
+    Learn how to contribute improvements to the project
+  </Card>
+</CardGroup>

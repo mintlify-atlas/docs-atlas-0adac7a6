@@ -1,0 +1,193 @@
+---
+title: Stalin Sort
+description: A humorous 'sorting' algorithm that removes elements that are out of order rather than rearranging them - achieving O(n) time by not actually sorting.
+---
+
+## Overview
+
+Stalin Sort is a joke algorithm that "sorts" an array by removing elements that break the sorted order, similar to how Joseph Stalin allegedly eliminated people who disagreed with him. While it runs in linear time, it doesn't actually sort the array - it just removes elements until what remains is sorted. The removed elements are placed in a vector called "gulag."
+
+<Note>
+  Stalin Sort is **not a real sorting algorithm**. It's a humorous computer science meme that demonstrates you can achieve O(n) time complexity if you don't care about preserving all elements. It's useful for teaching the importance of correctly defining what "sorting" means.
+</Note>
+
+## Complexity
+
+- **Time Complexity**: O(n) - single pass through array
+- **Space Complexity**: O(n) - in worst case, stores removed elements in gulag
+- **Stable**: N/A - not a true sorting algorithm
+- **Correct**: **No** - does not produce a permutation of the input
+
+## Implementation
+
+Here's the actual implementation from the Sorting Algorithms Visualiser:
+
+```cpp
+void StalinSort(std::vector<int>& nums){
+	std::vector<int>::iterator i = nums.begin();
+	std::vector<int>::iterator j = i;
+	std::vector<int> gulag;
+	while (i != nums.end()){
+		if (*i < *j){
+			gulag.push_back(*i);
+			i = nums.erase(i);
+            HighlightRectangles(static_cast<int>(j - nums.begin()), static_cast<int>(i - nums.begin()), -1);
+		}
+		else{
+			j = i;
+			i++;
+            HighlightRectangles(-1, static_cast<int>(i - nums.begin()), static_cast<int>(j - nums.begin()));
+		}
+		std::this_thread::sleep_for(std::chrono::nanoseconds(SORT_DELAY));
+	}
+	Verify(nums);
+	return;
+}
+```
+
+## How It Works
+
+1. **Initialize iterators**: 
+   - `i`: Current element being examined
+   - `j`: Last element that was kept (reference point)
+   - `gulag`: Vector to store removed elements
+
+2. **Single pass through array**:
+   - **If `*i < *j`**: Current element is smaller than previous kept element
+     - Add to `gulag` (remove from society)
+     - Erase from array
+     - Highlight positions in red/green
+   - **If `*i >= *j`**: Current element maintains sorted order
+     - Update `j = i` (this is now the reference)
+     - Move to next element `i++`
+     - Highlight positions in green/blue
+
+3. **Result**: Array contains only elements that form an increasing sequence
+
+### Step-by-Step Example
+
+For the array `[1, 5, 2, 7, 3, 9, 4, 8, 6]`:
+
+**Initial**: `[1, 5, 2, 7, 3, 9, 4, 8, 6]`, gulag: `[]`
+
+- Start with `1`: Keep (first element) → j = 1
+- Next `5`: 5 ≥ 1 → Keep → j = 5
+- Next `2`: 2 < 5 → **Remove to gulag** → `[1, 5, 7, 3, 9, 4, 8, 6]`, gulag: `[2]`
+- Next `7`: 7 ≥ 5 → Keep → j = 7
+- Next `3`: 3 < 7 → **Remove to gulag** → `[1, 5, 7, 9, 4, 8, 6]`, gulag: `[2, 3]`
+- Next `9`: 9 ≥ 7 → Keep → j = 9
+- Next `4`: 4 < 9 → **Remove to gulag** → `[1, 5, 7, 9, 8, 6]`, gulag: `[2, 3, 4]`
+- Next `8`: 8 < 9 → **Remove to gulag** → `[1, 5, 7, 9, 6]`, gulag: `[2, 3, 4, 8]`
+- Next `6`: 6 < 9 → **Remove to gulag** → `[1, 5, 7, 9]`, gulag: `[2, 3, 4, 8, 6]`
+
+**Final result**: `[1, 5, 7, 9]` (sorted, but missing 5 elements!)
+
+## Watch It in Action
+
+When running the visualiser, you'll see:
+
+- **Red highlight** (highlight1): Position `j` (reference element) when removing
+- **Green highlight** (highlight2): Position `i` (current element being evaluated)
+- **Blue highlight** (highlight3): Position `j` (reference) when keeping element
+- **Elements disappearing**: When an element is out of order, it vanishes from the visualization
+
+Unlike traditional sorting algorithms that rearrange elements, you'll see Stalin Sort actually shrinking the array by removing "problematic" elements.
+
+<Info>
+  The visualization shows elements being removed from the array in real-time. The array gets progressively shorter as out-of-order elements are eliminated (lines 124 and 129).
+</Info>
+
+## Why It's Not Real Sorting
+
+A sorting algorithm must produce a **permutation** (rearrangement) of the input. Stalin Sort violates this fundamental requirement:
+
+- ❌ Does not preserve all elements
+- ❌ Output is not a permutation of input
+- ❌ Information is lost (elements sent to gulag)
+- ✓ Output is technically in sorted order
+- ✓ Runs in linear time
+
+### Formal Definition Violation
+
+A sorting algorithm must satisfy:
+1. **Permutation**: Output contains exactly the same elements as input
+2. **Ordering**: Output is in sorted order
+
+Stalin Sort satisfies #2 but violates #1.
+
+## Use Cases
+
+**Educational purposes:**
+- Teaching algorithm correctness vs. efficiency
+- Demonstrating importance of problem definitions
+- Understanding trade-offs in algorithm design
+- Comic relief in computer science courses
+- Internet memes and humor
+
+**Potential real-world analogs:**
+- Data filtering (intentionally removing outliers)
+- Streaming data where you keep only increasing values
+- Monotonic sequence extraction
+- Finding longest increasing subsequence (modified)
+
+<Warning>
+  If you need to filter data to find an increasing subsequence, that's a valid operation - just don't call it "sorting"! Be clear about what your algorithm does.
+</Warning>
+
+## Advantages
+
+✓ Linear time complexity O(n)
+✓ Simple implementation
+✓ Single pass through data
+✓ Output is guaranteed to be sorted
+✓ Excellent teaching tool
+✓ High entertainment value
+
+## Disadvantages
+
+✗ **Not actually a sorting algorithm**
+✗ Loses data (removes elements)
+✗ Output is not a permutation of input
+✗ Produces incorrect results for sorting task
+✗ Variable output size
+✗ Not stable, not correct, not useful for sorting
+
+## Philosophical Implications
+
+Stalin Sort raises interesting questions:
+
+1. **What is sorting?** Must we preserve all elements?
+2. **Correctness vs. Efficiency**: Is a fast wrong answer better than a slow right answer?
+3. **Problem definition**: How do imprecise requirements lead to unexpected solutions?
+4. **Malicious compliance**: Technically satisfies "output is sorted"
+
+<Note>
+  Stalin Sort is a perfect example of why precise problem definitions matter in computer science. It achieves O(n) time by solving a different (easier) problem than actual sorting.
+</Note>
+
+## Related Concepts
+
+### Longest Increasing Subsequence (LIS)
+Stalin Sort essentially finds **an** increasing subsequence (though not necessarily the longest). The LIS problem is a legitimate algorithm challenge with real applications.
+
+### Greedy Algorithms
+Stalin Sort uses a greedy strategy: keep elements that maintain sorted order, discard those that don't. It's greedy but not optimal for sorting.
+
+### Problem Relaxation
+Stalin Sort demonstrates "problem relaxation" - making a hard problem easier by removing constraints (in this case, the requirement to keep all elements).
+
+## Comparison with Real Algorithms
+
+For array `[5, 2, 8, 1, 9]`:
+
+- **Stalin Sort**: `[5, 8, 9]` - 3 elements remain (wrong)
+- **Quick Sort**: `[1, 2, 5, 8, 9]` - all 5 elements sorted (correct)
+- **Insertion Sort**: `[1, 2, 5, 8, 9]` - all 5 elements sorted (correct)
+
+Stalin Sort is "efficient" because it's solving an easier problem!
+
+---
+
+## Historical Note
+
+The algorithm is named after Joseph Stalin (1878-1953), leader of the Soviet Union, referencing his practice of eliminating political opponents and purging those deemed disloyal. The "gulag" variable name refers to the Soviet forced labor camp system. While darkly humorous, the algorithm serves as a meme in computer science education.

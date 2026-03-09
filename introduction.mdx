@@ -1,0 +1,108 @@
+---
+title: "Introduction"
+description: "Learn about the Sorting Algorithms Visualiser - an interactive educational tool for understanding sorting algorithms through real-time visualization"
+---
+
+# Introduction
+
+The **Sorting Algorithms Visualiser** is an interactive educational tool built with C++ and SFML that helps you understand how different sorting algorithms work by visualizing their execution in real-time. Watch as bars representing numbers are compared, swapped, and ultimately sorted before your eyes.
+
+## What is the Sorting Algorithms Visualiser?
+
+This application provides a graphical window where you can:
+- Visualize sorting algorithms step-by-step with color-coded highlights
+- Control the speed of execution with customizable delay parameters
+- Compare different sorting algorithms side-by-side
+- Interact with buttons to shuffle, reverse, and refresh the data
+- Adjust the list size dynamically (from 5 to 250+ elements)
+
+The visualizer uses the **SFML (Simple and Fast Multimedia Library)** graphics library to render smooth, real-time animations showing exactly what happens during each comparison and swap operation.
+
+## Supported Sorting Algorithms
+
+The visualizer implements **6 different sorting algorithms**, each with its own characteristics:
+
+<CardGroup cols={2}>
+  <Card title="Bubble Sort" icon="water">
+    Classic comparison-based algorithm that repeatedly steps through the list
+  </Card>
+  <Card title="Insertion Sort" icon="arrow-down-1-9">
+    Builds the sorted array one item at a time through comparisons
+  </Card>
+  <Card title="Selection Sort" icon="magnifying-glass">
+    Finds the minimum element and places it at the beginning
+  </Card>
+  <Card title="Quick Sort" icon="bolt">
+    Efficient divide-and-conquer algorithm using partitioning
+  </Card>
+  <Card title="Bogo Sort" icon="shuffle">
+    Randomly shuffles until sorted (up to 1,000,000 iterations)
+  </Card>
+  <Card title="Stalin Sort" icon="trash">
+    Removes elements that are out of order (humorous algorithm)
+  </Card>
+</CardGroup>
+
+## Why Visualize Sorting Algorithms?
+
+Sorting algorithms can be difficult to understand from pseudocode or text descriptions alone. Visual representation helps by:
+
+- **Showing real-time comparisons**: See which elements are being compared with color-coded highlights (red, green, and blue)
+- **Demonstrating swap operations**: Watch elements exchange positions as the algorithm progresses
+- **Revealing algorithm behavior**: Understand why some algorithms are faster than others
+- **Making learning interactive**: Experiment with different list sizes and configurations
+- **Building intuition**: Develop a mental model of how each algorithm works
+
+<Note>
+  The visualizer highlights elements being compared or moved:
+  - **Red** highlight indicates the first comparison element
+  - **Green** highlight indicates the second comparison element  
+  - **Blue** highlight is used for additional context (e.g., verification pass)
+</Note>
+
+## What You'll Learn
+
+By using this visualizer, you'll gain practical understanding of:
+
+<AccordionGroup>
+  <Accordion title="Algorithm Efficiency">
+    Compare how quickly different algorithms sort the same dataset. Notice how Quick Sort outperforms Bubble Sort, or how Bogo Sort might never finish!
+  </Accordion>
+  
+  <Accordion title="Comparison Patterns">
+    See the different patterns each algorithm follows - Bubble Sort's wave-like motion, Selection Sort's methodical scanning, or Quick Sort's divide-and-conquer approach.
+  </Accordion>
+  
+  <Accordion title="Time Complexity in Action">
+    Witness the difference between O(n²) algorithms (Bubble, Selection, Insertion) and O(n log n) algorithms (Quick Sort) with your own eyes.
+  </Accordion>
+  
+  <Accordion title="Edge Cases">
+    Observe how algorithms behave with different inputs - sorted lists, reversed lists, or shuffled data.
+  </Accordion>
+</AccordionGroup>
+
+## Key Features
+
+- **Customizable speed**: Control sorting delay from nanoseconds to seconds via command-line parameter
+- **Dynamic list sizing**: Adjust from 5 to 250+ elements on the fly
+- **Interactive controls**: Shuffle, reverse, refresh, and quit buttons for easy experimentation
+- **Visual feedback**: Color-coded highlighting shows active comparisons and swaps
+- **Verification pass**: After sorting completes, a blue sweep confirms the list is sorted
+
+## Get Started
+
+<CardGroup cols={2}>
+  <Card title="Quick Start" icon="rocket" href="/quickstart">
+    Get the visualizer running in minutes with our step-by-step guide
+  </Card>
+  <Card title="User Interface" icon="desktop" href="/usage/interface">
+    Learn about all the buttons and controls available
+  </Card>
+  <Card title="Algorithms" icon="brain" href="/algorithms/bubble-sort">
+    Deep dive into how each algorithm works
+  </Card>
+  <Card title="Command Line" icon="terminal" href="/quickstart#command-line-usage">
+    Control execution speed with command-line parameters
+  </Card>
+</CardGroup>

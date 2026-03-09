@@ -1,0 +1,201 @@
+---
+title: Dependencies
+description: Overview of all dependencies used in the Sorting Algorithms Visualiser project
+---
+
+## Overview
+
+The Sorting Algorithms Visualiser has minimal dependencies, relying primarily on SFML for graphics and multimedia functionality. Dependencies are managed through vcpkg, Microsoft's C++ package manager.
+
+## Core Dependencies
+
+<Card title="SFML (Simple and Fast Multimedia Library)" icon="image" href="https://www.sfml-dev.org/">
+  Version 2.6.2 - A multimedia library providing graphics, window management, and event handling
+</Card>
+
+### SFML Components Used
+
+The project utilizes several SFML modules:
+
+<CardGroup cols={2}>
+  <Card title="Graphics" icon="palette">
+    **sf::RenderWindow** - Main application window
+    
+    **sf::RectangleShape** - Used to visualize data elements as vertical bars
+    
+    **sf::Color** - Color management for visual elements and buttons
+  </Card>
+
+  <Card title="Text & Fonts" icon="font">
+    **sf::Font** - Font loading and management
+    
+    **sf::Text** - Rendering text for UI elements (button labels, counters, algorithm names)
+  </Card>
+
+  <Card title="Window Management" icon="window-maximize">
+    **sf::VideoMode** - Window configuration and display settings
+    
+    **sf::View** - Camera and viewport management
+  </Card>
+
+  <Card title="Event Handling" icon="mouse-pointer">
+    **sf::Event** - Processing user input (mouse clicks, keyboard input)
+    
+    **sf::Mouse** - Mouse position and button state tracking
+  </Card>
+</CardGroup>
+
+## Dependency Configuration
+
+The project uses vcpkg manifest mode for dependency management. Dependencies are declared in `vcpkg.json`:
+
+```json
+{
+  "dependencies": [
+    "sfml"
+  ],
+  "overrides": [
+    {
+      "name": "sfml",
+      "version": "2.6.2"
+    }
+  ]
+}
+```
+
+### Version Override
+
+The project explicitly pins SFML to version **2.6.2** using the `overrides` section. This ensures consistent builds across different environments and prevents potential breaking changes from newer SFML versions.
+
+<Note>
+The version override guarantees that all developers and build systems use the exact same SFML version, avoiding compatibility issues.
+</Note>
+
+## vcpkg Configuration
+
+The `vcpkg-configuration.json` file specifies the package registry settings:
+
+```json
+{
+  "default-registry": {
+    "kind": "git",
+    "baseline": "b1b19307e2d2ec1eefbdb7ea069de7d4bcd31f01",
+    "repository": "https://github.com/microsoft/vcpkg"
+  },
+  "registries": [
+    {
+      "kind": "artifact",
+      "location": "https://github.com/microsoft/vcpkg-ce-catalog/archive/refs/heads/main.zip",
+      "name": "microsoft"
+    }
+  ]
+}
+```
+
+### Understanding the Configuration
+
+<Steps>
+  <Step title="Default Registry">
+    Points to the official Microsoft vcpkg repository with a specific baseline commit. This ensures reproducible builds by locking to a known-good state of the package registry.
+  </Step>
+
+  <Step title="Baseline Commit">
+    The baseline `b1b19307e2d2ec1eefbdb7ea069de7d4bcd31f01` represents a specific snapshot of the vcpkg registry, ensuring all packages are resolved to compatible versions.
+  </Step>
+
+  <Step title="Artifact Registry">
+    The Microsoft artifact registry provides additional packages and tools through the vcpkg-ce-catalog.
+  </Step>
+</Steps>
+
+## Asset Dependencies
+
+In addition to code dependencies, the project requires asset files:
+
+### Font Files
+
+<Card title="Roboto-Regular.ttf" icon="font">
+  Located in `assets/Roboto-Regular.ttf`
+  
+  Used for rendering all UI text including:
+  - Button labels
+  - List size counter
+  - Algorithm names and status
+  - Help text
+</Card>
+
+The font is loaded at startup:
+
+```cpp
+font.loadFromFile("assets/Roboto-Regular.ttf");
+```
+
+<Warning>
+The application will fail to display text properly if the font file is missing. Ensure the assets folder is accessible from the executable's working directory.
+</Warning>
+
+### Image Assets
+
+- **assets/Algo.png** - Application icon displayed in the title bar and taskbar
+
+## Build-Time Dependencies
+
+The project requires the following build tools:
+
+- **Visual Studio 2019 or later** with C++20 support
+- **Windows 10 SDK**
+- **Platform Toolset v143+** (configured as v145 in project)
+- **vcpkg** for package management
+
+### C++ Standard
+
+The project uses **C++20** (`stdcpp20`) for x64 builds, providing access to modern C++ features.
+
+## Runtime Dependencies
+
+When distributing the compiled application, ensure the following are included:
+
+1. **SFML DLLs** (if not statically linked):
+   - `sfml-graphics-2.dll`
+   - `sfml-window-2.dll`
+   - `sfml-system-2.dll`
+
+2. **Visual C++ Redistributable** for the target platform
+
+3. **Assets folder** containing:
+   - `Roboto-Regular.ttf`
+   - `Algo.png`
+
+<Note>
+vcpkg automatically handles DLL copying during the build process when using manifest mode and Visual Studio integration.
+</Note>
+
+## Why SFML?
+
+SFML was chosen for this project because:
+
+- **Simplicity**: Easy-to-use API for 2D graphics and window management
+- **Performance**: Hardware-accelerated rendering for smooth animations
+- **Cross-platform**: Although this project targets Windows, SFML supports Linux and macOS
+- **Active Development**: Well-maintained with regular updates
+- **Minimal Dependencies**: SFML itself has few external dependencies
+
+## External Links
+
+<CardGroup cols={2}>
+  <Card title="SFML Documentation" icon="book" href="https://www.sfml-dev.org/documentation/2.6.2/">
+    Official SFML 2.6.2 documentation
+  </Card>
+
+  <Card title="SFML Tutorials" icon="graduation-cap" href="https://www.sfml-dev.org/tutorials/2.6/">
+    Learn how to use SFML
+  </Card>
+
+  <Card title="vcpkg Repository" icon="box" href="https://github.com/microsoft/vcpkg">
+    Microsoft's C++ package manager
+  </Card>
+
+  <Card title="vcpkg Documentation" icon="file-text" href="https://vcpkg.io/">
+    vcpkg usage guide and reference
+  </Card>
+</CardGroup>

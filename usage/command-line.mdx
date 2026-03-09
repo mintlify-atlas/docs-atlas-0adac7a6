@@ -1,0 +1,195 @@
+---
+title: "Command-Line Options"
+description: "Configure sorting visualization speed using command-line arguments"
+---
+
+## Basic Usage
+
+The Sorting Algorithms Visualiser accepts an optional command-line parameter to control the visualization speed:
+
+```bash
+SortingAlgos.exe <delay_in_nanoseconds>
+```
+
+### Syntax
+
+- **Program Name**: `SortingAlgos.exe` (Windows) or `sortingalgos` (Unix-like systems)
+- **Parameter**: Single integer value representing the delay between operations in nanoseconds
+- **Optional**: If no parameter is provided, the default delay is used
+
+## Delay Parameter
+
+The delay parameter controls how long the program waits between each comparison or swap operation during sorting.
+
+### Default Value
+
+From `SortingAlgos.h:18`, the default `SORT_DELAY` is:
+
+```cpp
+int SORT_DELAY = 1;  // Delay in nanoseconds
+```
+
+### How It Works
+
+1. The program reads the command-line argument
+2. Validates that it's a positive integer
+3. Sets `SORT_DELAY` to the provided value
+4. Uses `std::this_thread::sleep_for(std::chrono::nanoseconds(SORT_DELAY))` between operations
+
+<Note>
+  The delay affects **every comparison and swap operation**, so the total sorting time is proportional to both the delay and the algorithm's complexity.
+</Note>
+
+## Examples
+
+### Fast Visualization
+
+```bash
+SortingAlgos.exe 1
+```
+Minimal delay (1 nanosecond) - nearly instantaneous on small arrays
+
+### Moderate Speed
+
+```bash
+SortingAlgos.exe 1000000
+```
+Delay of 1 millisecond (1,000,000 nanoseconds) - good for observing the sorting process
+
+### Slow Motion
+
+```bash
+SortingAlgos.exe 10000000
+```
+Delay of 10 milliseconds - ideal for educational demonstrations
+
+### Very Slow
+
+```bash
+SortingAlgos.exe 100000000
+```
+Delay of 100 milliseconds (0.1 seconds) - each step is clearly visible
+
+## Help Flag
+
+Display usage information with the help flag:
+
+```bash
+SortingAlgos.exe -h
+```
+
+or
+
+```bash
+SortingAlgos.exe --help
+```
+
+### Help Output
+
+When using the help flag, the program displays:
+
+```
+Command line usage: sortingalgo <delay between operations in nanoseconds>
+For example:
+    sortingalgos.exe 10
+    This will make it so that the hold between each comparision is 10 nanoseconds.
+```
+
+The program then exits with return code `0`.
+
+## Error Handling
+
+### Invalid Input
+
+If you provide a non-numeric value, the program displays an error message:
+
+```bash
+SortingAlgos.exe abc
+```
+
+**Output:**
+```
+Invalid delay input.
+Usage: sortingalgo <delay between operations in nanoseconds>
+For example:
+    sortingalgos.exe 10
+    This will make it so that the hold between each comparision is 10 nanoseconds.
+```
+
+The program exits with return code `1`.
+
+### Validation Logic
+
+From `SortingAlgos.h:28-36`, the program validates input:
+
+```cpp
+int is_number(const char* s) {
+    if (*s == '-' || *s == '+') return 0;   // no sign allowed
+    if (*s == '\0') return 0;                // empty string not allowed
+    
+    while (*s) {
+        if (*s < '0' || *s > '9') return 0;  // must be digits only
+        s++;
+    }
+    return 1;
+}
+```
+
+<Warning>
+  **Only positive integers are accepted**. The program rejects negative numbers, signed values (with + or -), and non-numeric strings.
+</Warning>
+
+## Performance Considerations
+
+### Choosing the Right Delay
+
+<CardGroup cols={2}>
+  <Card title="Small Delays (1-1000 ns)" icon="bolt">
+    - Nearly instantaneous
+    - Good for benchmarking
+    - Hard to observe individual steps
+  </Card>
+  <Card title="Medium Delays (1ms-10ms)" icon="gauge">
+    - Balanced visualization
+    - Steps are observable
+    - Reasonable completion time
+  </Card>
+</CardGroup>
+
+<CardGroup cols={2}>
+  <Card title="Large Delays (10ms-100ms)" icon="clock">
+    - Educational demonstrations
+    - Each step clearly visible
+    - Longer total time
+  </Card>
+  <Card title="Very Large Delays (>100ms)" icon="turtle">
+    - Step-by-step analysis
+    - May feel sluggish
+    - Best for small arrays
+  </Card>
+</CardGroup>
+
+### Time Calculations
+
+For an array of 250 elements:
+
+- **Bubble Sort**: ~31,000 comparisons × delay
+- **Selection Sort**: ~31,125 comparisons × delay  
+- **Quick Sort**: ~2,000-3,000 comparisons × delay
+
+<Note>
+  With a delay of 1ms (1,000,000 ns), Bubble Sort on 250 elements takes approximately **31 seconds** to complete.
+</Note>
+
+## Running Without Arguments
+
+If you run the program without any arguments:
+
+```bash
+SortingAlgos.exe
+```
+
+The program:
+1. Uses the default `SORT_DELAY` value of `1` nanosecond
+2. Starts normally with the graphical interface
+3. Sorts will run at maximum speed (limited only by rendering)
