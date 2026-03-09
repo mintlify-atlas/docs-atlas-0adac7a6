@@ -1,0 +1,62 @@
+{
+  "projectType": "general",
+  "projectName": "Sorting Algorithms Visualiser",
+  "projectDescription": "Visual tool for observing and comparing different sorting algorithms in real-time",
+  "theme": "aspen",
+  "primaryColor": "#3B82F6",
+  "lightColor": "#60A5FA",
+  "darkColor": "#1E40AF",
+  "navigation": {
+    "groups": [
+      {
+        "group": "Overview",
+        "pages": [
+          "introduction",
+          "quickstart"
+        ]
+      },
+      {
+        "group": "Algorithms",
+        "pages": [
+          "algorithms/bubble-sort",
+          "algorithms/insertion-sort",
+          "algorithms/selection-sort",
+          "algorithms/quick-sort",
+          "algorithms/bogo-sort",
+          "algorithms/stalin-sort"
+        ]
+      },
+      {
+        "group": "Usage",
+        "pages": [
+          "usage/interface",
+          "usage/command-line",
+          "usage/customization"
+        ]
+      },
+      {
+        "group": "Development",
+        "pages": [
+          "development/building",
+          "development/dependencies",
+          "development/contributing"
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Real-time visualization of 6 sorting algorithms",
+    "Interactive controls for shuffling, reversing, and adjusting list size",
+    "Color-coded comparison highlighting (red, green, blue)",
+    "Adjustable sort delay for speed control",
+    "Built with SFML graphics library"
+  ],
+  "publicApiSurface": [
+    "BubbleSort(std::vector<int>&)",
+    "InsertionSort(std::vector<int>&)",
+    "SelectionSort(std::vector<int>&)",
+    "QuickSort(std::vector<int>&, int, int)",
+    "BogoSort(std::vector<int>&)",
+    "StalinSort(std::vector<int>&)"
+  ]
+}
